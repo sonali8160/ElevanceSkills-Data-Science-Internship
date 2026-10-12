@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ElevanceSkills Data Science Internship — Customer Service Chatbot
 
 This repository extends the original training project: a customer-service FAQ chatbot backed by the original `dataset/dataset.csv`. The internship work adds six task modules to the same project; it does not replace the training dataset with an unrelated dataset or create an unrelated project.
@@ -106,3 +107,6 @@ The original CSV is retained in `dataset/dataset.csv`. Its current text encoding
 ## Original project and internship extension
 
 The original FAQ chatbot and dataset remain part of this repository. The internship modules are added as separate task packages and exposed through the combined Streamlit dashboard to make mentor review easier.
+=======
+# ElevanceSkills-Data-Science-Internship
+>>>>>>> 494679dccec13d096de55b885aa60ead4abccefd
