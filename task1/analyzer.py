@@ -704,114 +704,110 @@ def detect_sentiment(
     language: str,
     sarcastic: bool = False,
 ) -> str:
+    """
+    Deterministic sentiment classification.
 
+    Strong complaint/frustration signals take precedence over incidental
+    positive words such as "solved", "great", or "wonderful". A message is
+    positive only when it expresses genuine satisfaction/resolution without
+    a conflicting complaint or unresolved-service signal.
+    """
     normalized = _normalize(text)
-
-    positive_words = POSITIVE_WORDS.get(
-        language,
-        [],
-    )
-
-    negative_words = NEGATIVE_WORDS.get(
-        language,
-        [],
-    )
+    positive_words = POSITIVE_WORDS.get(language, [])
+    negative_words = NEGATIVE_WORDS.get(language, [])
 
     positive_count = _count_vocabulary_matches(
-        normalized,
-        positive_words,
-        ignore_negated=True,
+        normalized, positive_words, ignore_negated=True
     )
+    negative_count = _count_vocabulary_matches(normalized, negative_words)
 
-    negative_count = _count_vocabulary_matches(
-        normalized,
-        negative_words,
-    )
-
-    # Frustration contributes to negative sentiment.
-    if _contains_pattern(
-        normalized,
-        FRUSTRATION_PATTERNS,
-    ):
-        negative_count += 2
-
-    # Sarcastic complaint should be negative.
-    if sarcastic:
-        negative_count += 3
-
-    # Explicit service-failure phrases.
+    frustration_patterns = FRUSTRATION_PATTERNS + [
+        "nobody has solved my problem",
+        "nobody solved my problem",
+        "no one has solved my problem",
+        "no one solved my problem",
+        "nobody has helped",
+        "no one has helped",
+        "contacted support three times",
+        "contacted support multiple times",
+        "contacted support several times",
+        "three times",
+        "again and again",
+        "still unresolved",
+        "not been resolved",
+        "has not been resolved",
+        "nothing has been fixed",
+        "this service is ridiculous",
+        "nobody cares",
+        "no one cares",
+        "extremely disappointed",
+        "very disappointed",
+        "not happy",
+        "unacceptable",
+        "ridiculous",
+    ]
+    strong_negative_patterns = [
+        "nobody has solved my problem",
+        "nobody solved my problem",
+        "no one has solved my problem",
+        "no one solved my problem",
+        "nobody has helped",
+        "no one has helped",
+        "this is ridiculous",
+        "service is ridiculous",
+        "extremely disappointed",
+        "very disappointed",
+        "unacceptable",
+        "fed up",
+        "waste of time",
+        "nothing has been fixed",
+        "still unresolved",
+        "not been resolved",
+        "has not been resolved",
+        "not happy",
+    ]
     service_failure_patterns = [
-        "not working",
-        "doesn't work",
-        "didn't work",
-        "not arrived",
-        "has not arrived",
-        "hasn't arrived",
-        "not received",
-        "has not received",
-        "still waiting",
-        "failed",
-        "failure",
-        "unable",
-        "cannot",
-        "can't",
+        "not working", "doesn't work", "didn't work", "not arrived",
+        "has not arrived", "hasn't arrived", "not received",
+        "has not received", "still waiting", "failed", "failure",
+        "unable", "cannot", "can't", "nobody solved", "nobody has solved",
+        "no one solved", "no one has solved", "not resolved",
+        "not fixed", "not solved",
     ]
 
-    if _contains_pattern(
+    has_frustration = _contains_pattern(normalized, frustration_patterns)
+    has_strong_negative = _contains_pattern(normalized, strong_negative_patterns)
+    has_service_failure = _contains_pattern(normalized, service_failure_patterns)
+
+    # Negated praise is not positive sentiment.
+    if re.search(
+        r"\b(?:not|never|no longer)\b.{0,25}\b(?:good|great|happy|satisfied|wonderful|perfect)\b",
         normalized,
-        service_failure_patterns,
     ):
-        negative_count += 2
+        positive_count = 0
 
-    # --------------------------------------------------------
-    # Strong gratitude/resolution rule
-    # --------------------------------------------------------
-    #
-    # "Thank you so much, you solved my problem!"
-    # contains "problem", but the actual customer intent
-    # is positive because the problem was solved.
-    #
-    positive_resolution_patterns = [
-        "thank you",
-        "thanks",
-        "solved my problem",
-        "problem solved",
-        "issue resolved",
-        "resolved my issue",
-        "you solved",
-        "thanks for solving",
-    ]
-
-    if (
-    _contains_pattern(
-        normalized,
-        positive_resolution_patterns,
-    )
-    and not sarcastic
-    and not _contains_pattern(
-        normalized,
-        FRUSTRATION_PATTERNS,
-    )
-    and not re.search(
-        r"\b(?:nobody|no one|not|never|hasn't|haven't|"
-        r"didn't|doesn't|can't|cannot)\b.{0,40}"
-        r"\b(?:solved|resolved|fixed)\b",
-        normalized,
-    )
-):
-     return "positive"
-
-    # Sarcastic messages containing service failures
-    # are negative.
-    if sarcastic and negative_count > 0:
+    # Strong complaints win over incidental positive vocabulary.
+    if sarcastic or has_strong_negative or has_frustration or has_service_failure:
         return "negative"
+
+    # Positive resolution language is positive only when the complaint has
+    # genuinely been resolved and the message is not otherwise negative.
+    positive_resolution_patterns = [
+        "thank you", "thanks", "solved my problem", "problem solved",
+        "issue resolved", "resolved my issue", "you solved",
+        "thanks for solving", "everything works", "works perfectly",
+    ]
+    has_positive_resolution = _contains_pattern(
+        normalized, positive_resolution_patterns
+    )
+
+    if has_positive_resolution and negative_count == 0 and not sarcastic:
+        return "positive"
 
     if negative_count > positive_count:
         return "negative"
-
     if positive_count > negative_count:
         return "positive"
-
     return "neutral"
 
 
@@ -911,10 +907,23 @@ def analyze_message(
         text
     )
 
-    frustrated = _contains_pattern(
-        normalized,
-        FRUSTRATION_PATTERNS,
-    )
+    frustration_indicators = FRUSTRATION_PATTERNS + [
+        "contacted support three times",
+        "contacted support multiple times",
+        "contacted support several times",
+        "nobody has solved my problem",
+        "nobody solved my problem",
+        "no one has solved my problem",
+        "no one solved my problem",
+        "nobody has helped",
+        "no one has helped",
+        "extremely disappointed",
+        "very disappointed",
+        "unacceptable",
+        "not happy",
+        "still unresolved",
+    ]
+    frustrated = _contains_pattern(normalized, frustration_indicators)
 
     explicit_urgent = _contains_pattern(
         normalized,
@@ -953,12 +962,25 @@ def analyze_message(
         sarcastic=sarcastic,
     )
 
-    # High-risk issues are urgent even when the
-    # wording is calm/neutral.
-    urgent = (
-        explicit_urgent
-        or bool(risk_categories)
-    )
+    # Repeated unresolved negative messages in recent history should be
+    # treated as frustration. The caller can use this signal for escalation.
+    if history:
+        recent_context = " ".join(str(item) for item in history[-5:])
+        repeated_complaint = _contains_pattern(
+            recent_context,
+            FRUSTRATION_PATTERNS + [
+                "still waiting", "not resolved", "not fixed",
+                "nobody helped", "contacted support three times",
+                "contacted support multiple times",
+            ],
+        )
+        if repeated_complaint:
+            frustrated = True
+            if sentiment == "positive":
+                sentiment = "negative"
+
+    # High-risk issues are urgent even when the wording is calm/neutral.
+    urgent = explicit_urgent or bool(risk_categories)
 
     confidence = _confidence_scores(
         sentiment=sentiment,
