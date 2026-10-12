@@ -738,6 +738,7 @@ def detect_sentiment(
         "has not been resolved",
         "nothing has been fixed",
         "this service is ridiculous",
+        "nobody has solved my problem",
         "nobody cares",
         "no one cares",
         "extremely disappointed",
