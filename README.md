@@ -1,85 +1,229 @@
+# ElevanceSkills Data Science Internship  
+## Customer Service Chatbot with AI-Powered Support Workflows
 
-# ElevanceSkills Data Science Internship — Customer Service Chatbot
+A Python-based customer service chatbot project that combines FAQ question answering with six additional task modules for sentiment analysis, support ticket management, knowledge-base monitoring, retrieval-augmented generation (RAG), evidence processing, and multilingual conversations.
 
-This repository extends the original training project: a customer-service FAQ chatbot backed by the original `dataset/dataset.csv`. The internship work adds six task modules to the same project; it does not replace the training dataset with an unrelated dataset or create an unrelated project.
+The project extends the original customer service chatbot and its existing FAQ dataset with modular features designed to demonstrate practical AI, data processing, and customer support automation concepts.
 
-## Project features
+## Table of Contents
 
-- **Original chatbot:** FAQ question answering from the existing CSV dataset; optional Gemini-powered knowledge-base functionality.
-- **Task 1 — Sentiment, tone and escalation:** sentiment/frustration/urgency/sarcasm signals, confidence scores, conversation history, high-risk detection, tone guidance and time-aware escalation.
-- **Task 2 — Support ticket workflow:** field extraction, missing-information requests, priority, SLA calculations, routing, duplicate/group detection and masked handoff summaries.
-- **Task 3 — Knowledge-base update pipeline:** document change detection, duplicate/invalid-document handling, quality checks, versioning, scheduled activation, retry/rollback logic, access control and monitoring.
-- **Task 4 — RAG knowledge assistant:** metadata-aware document retrieval, role/access checks, date/version-aware policies, citations, and refusal when evidence is insufficient or unsafe.
-- **Task 5 — Evidence/OCR processing:** image/PDF/text/CSV evidence extraction, comparison against customer claims, clarification for uncertain/mismatched evidence, masking and retention handling. OCR images locally with Tesseract installed.
-- **Task 6 — Multilingual sessions:** English, Hindi, Marathi and Spanish baseline detection, mixed-language messages, entity preservation, context retention, session isolation and restoration. This is a rule-based demonstrator, not a production translation service.
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Installation and Setup](#installation-and-setup)
+- [Configuration](#configuration)
+- [Run the Application](#run-the-application)
+- [Run Tests](#run-tests)
+- [Dataset](#dataset)
+- [Security](#security)
+- [Future Improvements](#future-improvements)
 
-## Repository structure
+## Project Overview
+
+Customer support teams handle a wide range of customer queries, unresolved issues, documents, and multilingual conversations. This project demonstrates how Python-based automation and AI-related techniques can help organize these workflows.
+
+The application provides a Streamlit interface where users can explore the original chatbot and six task modules through a unified dashboard.
+
+## Features
+
+### Original Customer Service Chatbot
+- Answers frequently asked questions using the existing CSV dataset.
+- Includes knowledge-base functionality using LangChain.
+- Supports an optional Google Gemini-powered question-answering workflow.
+
+### Task 1: Sentiment Analysis and Escalation
+- Analyzes customer messages for sentiment, tone, urgency, and frustration.
+- Considers conversation history.
+- Identifies potential risk indicators.
+- Provides escalation-related signals and analysis results.
+
+### Task 2: Support Ticket Management
+- Extracts useful customer and issue information from conversations.
+- Identifies missing information.
+- Determines ticket priority and service-level agreement (SLA) details.
+- Routes tickets to suitable support agents.
+- Supports duplicate detection, grouping, and handoff summaries.
+
+### Task 3: Knowledge-Base Update Pipeline
+- Scans documents for new or changed content.
+- Checks document quality and duplicates.
+- Supports document versioning and scheduled activation.
+- Demonstrates access control, monitoring, retry, and rollback workflows.
+
+### Task 4: Retrieval-Augmented Generation (RAG) Assistant
+- Retrieves relevant knowledge documents.
+- Uses document metadata, versions, dates, and access levels.
+- Supports evidence-based responses and citations.
+- Demonstrates handling of insufficient or restricted information.
+
+### Task 5: Evidence and OCR Processing
+- Processes supported image, PDF, text, and CSV evidence.
+- Extracts information for comparison with customer claims.
+- Supports clarification for uncertain or mismatched information.
+- Demonstrates data masking and retention-related handling.
+
+Note: OCR for image files requires Tesseract OCR to be installed separately.
+
+### Task 6: Multilingual Chat
+- Demonstrates baseline language detection for English, Hindi, Marathi, and Spanish.
+- Handles mixed-language messages.
+- Demonstrates conversation context, session isolation, and restoration.
+- A rule-based demonstration rather than a production translation service.
+
+## Technology Stack
+
+- **Programming Language:** Python
+- **Web Interface:** Streamlit
+- **AI and Language Processing:** LangChain, Google Gemini integration
+- **Data Processing:** Pandas
+- **Retrieval and Vector Search:** FAISS, Sentence Transformers
+- **Document Processing:** PyPDF, PyMuPDF, Pillow
+- **OCR:** Pytesseract and Tesseract OCR
+- **Testing:** Pytest and Python unittest
+
+## Project Structure
 
 ```text
 ElevanceSkills-Data-Science-Internship/
 ├── dataset/
-│   └── dataset.csv              # Original training FAQ dataset
+│   └── dataset.csv
 ├── src/
-│   ├── internship_dashboard.py  # Combined website for original chatbot + Tasks 1–6
-│   ├── langchain_helper.py      # Original chatbot knowledge-base helper
-│   └── main.py                 # Original chatbot entry point
-├── task1/                       # Sentiment, tone and escalation
-├── task2/                       # Support ticket workflow
-├── task3/                       # Knowledge-base update pipeline
-├── task4/                       # RAG assistant
-├── task5/                       # Evidence and OCR processing
-├── task6/                       # Multilingual chat and sessions
-├── tests/                       # Included test suites and combined test runner
+│   ├── internship_dashboard.py
+│   ├── langchain_helper.py
+│   └── main.py
+├── task1/
+│   ├── analyzer.py
+│   ├── conversation.py
+│   ├── escalation.py
+│   ├── models.py
+│   └── tone.py
+├── task2/
+│   ├── duplicate.py
+│   ├── extractor.py
+│   ├── grouping.py
+│   ├── routing.py
+│   ├── sla.py
+│   └── ticket_workflow.py
+├── task3/
+│   ├── monitoring.py
+│   ├── pipeline.py
+│   ├── quality.py
+│   └── security.py
+├── task4/
+│   └── rag_assistant.py
+├── task5/
+│   └── evidence_processor.py
+├── task6/
+│   └── multilingual_chat.py
+├── tests/
+│   ├── run_all_tests.py
+│   └── task1_test_cases.py
+│   └── task2_test_cases.py
+│   └── task3_test_cases.py
+│   └── task4_test_cases.py
+│   └── task5_test_cases.py
+│   └── task6_test_cases.py
 ├── requirements.txt
 └── README.md
 ```
 
-## Requirements
+## Installation and Setup
 
-- Python 3.11 recommended.
-- Tesseract OCR is an optional system dependency for OCR on image files.
-- A Google API key is only required for the optional Gemini mode / original vector knowledge-base creation. Do not commit API keys or `.env` files.
+### Prerequisites
 
-## Setup on Windows
+- Python 3.11 recommended
+- Git
+- Visual Studio Code or another Python editor
+- Internet access for installing dependencies and using optional online AI services
 
-Open a terminal in the repository root (the folder containing `requirements.txt`) and run:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/sonali8160/ElevanceSkills-Data-Science-Internship.git
+cd ElevanceSkills-Data-Science-Internship
+```
+
+### 2. Create a virtual environment
+
+**Windows PowerShell:**
 
 ```powershell
 py -3.11 -m venv .venv
 .venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, use Command Prompt:
+
+```cmd
+.venv\Scripts\activate.bat
+```
+
+### 3. Install dependencies
+
+```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-If PowerShell blocks activation, use Command Prompt and run `.venv\Scripts\activate.bat`.
+## Configuration
 
-## Run the combined website
+The original chatbot's optional Gemini-powered functionality requires a valid Google API key.
 
-From the repository root:
+1. Create a local file named `.env` in the project root.
+2. Add your key:
 
-```powershell
+```env
+GOOGLE_API_KEY=your_google_api_key_here
+```
+
+3. Save the file.
+
+Replace the placeholder with your own valid key. Never commit your actual API key or `.env` file to GitHub.
+
+Some dashboard functionality can be demonstrated without configuring the optional API integration.
+
+## Run the Application
+
+### Combined dashboard
+
+From the project root, run:
+
+```bash
 python -m streamlit run src/internship_dashboard.py
 ```
 
-The website contains tabs for the original chatbot and each of Tasks 1–6. The original FAQ mode reads `dataset/dataset.csv`; the combined dashboard includes a local dataset-answer mode so basic FAQ matching can be demonstrated without an API key. The optional Gemini mode requires `GOOGLE_API_KEY` in a local `.env` file or Streamlit deployment secrets.
+Streamlit will display a local URL in the terminal, usually:
 
-To run only the original chatbot interface instead:
+```text
+http://localhost:8501
+```
 
-```powershell
+Open that URL in your browser.
+
+The dashboard contains tabs for the original chatbot and Tasks 1–6.
+
+### Original chatbot only
+
+To run the original chatbot interface separately:
+
+```bash
 python -m streamlit run src/main.py
 ```
 
-## Run tests
+The original knowledge-base workflow may require the configured Google API key and successful creation of its vector database.
 
-Run all included task suites from the repository root:
+## Run Tests
 
-```powershell
+To run all six included task test suites from the project root:
+
+```bash
 python tests/run_all_tests.py
 ```
 
-Or run individual suites:
+To run an individual test suite:
 
-```powershell
+```bash
 python tests/task1_test_cases.py
 python tests/task2_test_cases.py
 python -m unittest discover -s tests -p "task3_test_cases.py" -v
@@ -88,25 +232,52 @@ python -m unittest discover -s tests -p "task5_test_cases.py" -v
 python -m unittest discover -s tests -p "task6_test_cases.py" -v
 ```
 
-The test runner runs only test files included in this repository. Test success demonstrates the included scenarios; it does not by itself prove production readiness or guarantee an internship stipend.
+Review the test output to identify any failed cases or environment-related issues.
 
-## Dataset and encoding
+## Dataset
 
-The original CSV is retained in `dataset/dataset.csv`. Its current text encoding is Windows-1252, so code that reads it should use an encoding fallback (the chatbot helper does this). Do not replace it with an unrelated dataset.
+The project retains its original FAQ dataset at:
 
-## GitHub submission checklist
+`dataset/dataset.csv`
 
-1. Commit the complete project, including `dataset/`, `src/`, `task1/` through `task6/`, `tests/`, `requirements.txt`, and this README.
-2. Confirm the repository is **Public** and opens in a private/incognito browser window without signing in.
-3. Confirm the README commands match files in the repository.
-4. Create a clean Python environment, install requirements, run the combined test command, and launch the dashboard.
-5. Test the public deployment URL separately if submitting one; a public GitHub repository does not automatically mean the Streamlit app is deployed.
-6. Check for secrets, local paths, temporary files, and generated caches before committing.
-7. Only submit to ElevanceSkills after you have reviewed the final repository URL and any required report/details. The provider's instructions state that submission is one-time and cannot be edited afterward.
+The dataset supports the original customer service question-answering functionality. The code may require Windows-1252 encoding when reading this CSV.
 
-## Original project and internship extension
+## Security
 
-The original FAQ chatbot and dataset remain part of this repository. The internship modules are added as separate task packages and exposed through the combined Streamlit dashboard to make mentor review easier.
-=======
-# ElevanceSkills-Data-Science-Internship
+- Keep API keys and credentials out of source code and Git history.
+- Keep `.env`, virtual environments, and Python cache files out of GitHub.
+- Do not upload private customer information or confidential datasets.
+- Rotate any credential that has been accidentally exposed.
+- Apply appropriate access controls and data protection measures before adapting the demonstration for real customer data.
 
+## Future Improvements
+
+- Improve intent detection and sentiment classification with evaluated machine learning models.
+- Add a persistent database for customer support tickets.
+- Integrate the chatbot with a real support platform.
+- Add automated deployment and continuous integration.
+- Evaluate retrieval quality and response accuracy using a larger, representative test dataset.
+- Expand multilingual support with dedicated language models.
+
+## Learning Outcomes
+
+This project provides practical experience with:
+
+- Python application development
+- Streamlit dashboard development
+- Data handling and text processing
+- AI-powered question answering
+- Retrieval-augmented generation concepts
+- Support workflow automation
+- Document and evidence processing
+- Modular code organization and testing
+
+## Disclaimer
+
+This repository is an educational and demonstration project. Its outputs, security checks, OCR results, routing decisions, and AI-generated responses should be evaluated before any real-world use. The included test suites do not establish production readiness.
+
+---
+
+**Author:** Sonali Jadhav
+
+**Project:** ElevanceSkills Data Science Internship — Customer Service Chatbot
