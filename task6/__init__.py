@@ -1,0 +1,1 @@
+# task6/__init__.py
