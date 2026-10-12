@@ -921,6 +921,8 @@ def analyze_message(
         "very disappointed",
         "unacceptable",
         "not happy",
+        "this service is ridiculous",
+        "Nobody has solved my problem",
         "still unresolved",
     ]
     frustrated = _contains_pattern(normalized, frustration_indicators)
