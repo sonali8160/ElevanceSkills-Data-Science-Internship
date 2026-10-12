@@ -133,6 +133,7 @@ NEGATIVE_WORDS = {
         "cannot",
         "can't",
         "unable",
+        "nobody has solved",
         "disappointed",
         "unhappy",
         "worst",
