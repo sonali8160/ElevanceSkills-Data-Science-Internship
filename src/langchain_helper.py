@@ -12,7 +12,7 @@ from langchain_google_genai import (
 )
 from langchain_core.prompts import PromptTemplate
 from langchain_classic.chains import RetrievalQA
-from langchain_huggingface import HuggingFaceEmbeddings
+
 
 # --------------------------------------------------
 # Project paths
