@@ -783,13 +783,23 @@ def detect_sentiment(
     ]
 
     if (
-        _contains_pattern(
-            normalized,
-            positive_resolution_patterns,
-        )
-        and not sarcastic
-    ):
-        return "positive"
+    _contains_pattern(
+        normalized,
+        positive_resolution_patterns,
+    )
+    and not sarcastic
+    and not _contains_pattern(
+        normalized,
+        FRUSTRATION_PATTERNS,
+    )
+    and not re.search(
+        r"\b(?:nobody|no one|not|never|hasn't|haven't|"
+        r"didn't|doesn't|can't|cannot)\b.{0,40}"
+        r"\b(?:solved|resolved|fixed)\b",
+        normalized,
+    )
+):
+     return "positive"
 
     # Sarcastic messages containing service failures
     # are negative.
