@@ -1,6 +1,4 @@
-"""Unified Streamlit website for the Original Chatbot and Tasks 1–6.
-Run from the project root: python -m streamlit run src/internship_dashboard.py
-"""
+
 from pathlib import Path
 from datetime import datetime, date, timedelta
 from types import SimpleNamespace
@@ -380,4 +378,34 @@ with Original:
                     st.write(response)
 
             except Exception as exc:
-                st.error(f"Original chatbot error: {exc}")
+                error_text = str(exc).upper()
+
+                # Use the local dataset if Gemini is unavailable
+                quota_error = any(
+                    term in error_text
+                    for term in (
+                        "429",
+                        "RESOURCE_EXHAUSTED",
+                        "QUOTA",
+                        "503",
+                        "UNAVAILABLE",
+                    )
+                )
+
+                if quota_error:
+                    st.warning(
+                        "Gemini AI is temporarily unavailable or "
+                        "its quota has been exhausted. "
+                        "Using the local dataset instead."
+                    )
+
+                    fallback_answer, _ = local_dataset_answer(
+                        original_question.strip()
+                    )
+
+                    st.subheader("Answer")
+                    st.write(fallback_answer)
+
+                else:
+                    st.error(f"Original chatbot error: {exc}")
+
