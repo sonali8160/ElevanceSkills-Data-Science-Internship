@@ -349,6 +349,7 @@ with Original:
 
     # Get Answer
     if st.button("Get Answer", key="original_get_answer"):
+
         if not original_question.strip():
             st.warning("Please enter a question first.")
 
@@ -359,28 +360,32 @@ with Original:
             try:
                 from langchain_helper import get_qa_chain
 
-                with st.spinner("finding an answer..."):
+                with st.spinner("Finding an answer..."):
                     chain = get_qa_chain()
+
+                    # create_retrieval_chain expects "input"
                     response = chain.invoke(
-                        {"query": original_question.strip()}
+                        {"input": original_question.strip()}
                     )
 
                 st.subheader("Answer")
 
+                # create_retrieval_chain returns "answer"
                 if isinstance(response, dict):
-                    st.write(
-                        response.get(
-                            "result",
-                            "No answer returned."
-                        )
-                    )
-                else:
-                    st.write(response)
+                    answer = response.get("answer")
+
+                    if answer:
+                        st.write(answer)
+                    else:
+                        st.warning("No answer returned by the chatbot.")
+
+                    # Optional: display source documents
+                    context = response.get("context", [])
+
 
             except Exception as exc:
                 error_text = str(exc).upper()
 
-                # Use the local dataset if Gemini is unavailable
                 quota_error = any(
                     term in error_text
                     for term in (
@@ -399,13 +404,21 @@ with Original:
                         "Using the local dataset instead."
                     )
 
-                    fallback_answer, _ = local_dataset_answer(
-                        original_question.strip()
-                    )
+                    try:
+                        fallback_answer, _ = local_dataset_answer(
+                            original_question.strip()
+                        )
 
-                    st.subheader("Answer")
-                    st.write(fallback_answer)
+                        st.subheader("Answer")
+                        st.write(fallback_answer)
+
+                    except Exception as fallback_exc:
+                        st.error(
+                            "The local fallback also failed: "
+                            f"{fallback_exc}"
+                        )
 
                 else:
-                    st.error(f"Original chatbot error: {exc}")
-
+                    st.error(
+                        f"Original chatbot error: {exc}"
+                    )
