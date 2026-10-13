@@ -2,7 +2,6 @@ import streamlit as st
 
 from langchain_helper import get_qa_chain, create_vector_db
 
-
 st.set_page_config(
     page_title="Customer Service Chatbot",
     page_icon="🤖"
