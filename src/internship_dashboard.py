@@ -387,7 +387,5 @@ with Original:
                 error_text = str(exc).upper()
 
 
-                else:
-                    st.error(
                         f"Original chatbot error: {exc}"
                     )
