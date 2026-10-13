@@ -386,37 +386,6 @@ with Original:
             except Exception as exc:
                 error_text = str(exc).upper()
 
-                quota_error = any(
-                    term in error_text
-                    for term in (
-                        "429",
-                        "RESOURCE_EXHAUSTED",
-                        "QUOTA",
-                        "503",
-                        "UNAVAILABLE",
-                    )
-                )
-
-                if quota_error:
-                    st.warning(
-                        "Gemini AI is temporarily unavailable or "
-                        "its quota has been exhausted. "
-                        "Using the local dataset instead."
-                    )
-
-                    try:
-                        fallback_answer, _ = local_dataset_answer(
-                            original_question.strip()
-                        )
-
-                        st.subheader("Answer")
-                        st.write(fallback_answer)
-
-                    except Exception as fallback_exc:
-                        st.error(
-                            "The local fallback also failed: "
-                            f"{fallback_exc}"
-                        )
 
                 else:
                     st.error(
