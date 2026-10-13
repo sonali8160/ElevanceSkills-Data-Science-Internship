@@ -185,6 +185,11 @@ Some dashboard functionality can be demonstrated without configuring the optiona
 
 ## Run the Application
 
+Live url
+```text
+[http://localhost:8501](https://elevanceskills-data-science-internship-j8nklyqxw9cuuwyvtklcfg.streamlit.app/)
+```
+
 ### Combined dashboard
 
 From the project root, run:
