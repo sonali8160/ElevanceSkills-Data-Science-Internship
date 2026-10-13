@@ -1,3 +1,4 @@
+#faq.txt — Sample FAQ document used to test Task 3 document ingestion.
 CUSTOMER SERVICE FAQ
 
 Q1. How can I track my order?
