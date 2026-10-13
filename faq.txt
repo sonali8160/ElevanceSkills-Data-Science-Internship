@@ -1,0 +1,35 @@
+CUSTOMER SERVICE FAQ
+
+Q1. How can I track my order?
+Answer: Sign in to your account and open the My Orders section. Select your order to view its status and tracking information.
+
+Q2. What should I do if I was charged twice?
+Answer: Check your bank statement and order history. Contact the payments support team with your order ID and evidence of both charges. Never share your PIN, password, or one-time password.
+
+Q3. How can I request a refund?
+Answer: Open your order and review the applicable refund policy. Submit a refund request with your order ID and a short explanation.
+
+Q4. How do I change my account email address?
+Answer: Sign in, open Account Settings, and follow the email verification steps.
+
+Q5. I cannot sign in. What can I do?
+Answer: Check your login details and use the password-reset option if necessary. Contact account support if the issue continues.
+
+Q6. How can I contact customer support?
+Answer: Open the Help or Contact Support section on the official website or application. Include a brief description of your issue.
+
+Q7. What information is required for a missing order?
+Answer: Provide your order ID, order date, and a description of the missing item.
+
+Q8. Is my personal information safe?
+Answer: Share only the information required to resolve your issue. Never share your password, PIN, or one-time password.
+
+DOCUMENT METADATA
+Document ID: FAQ-CUSTOMER-SUPPORT-001
+Document Type: Customer Support FAQ
+Version: 1.0
+Status: Active
+Region: General
+Effective Date: 2026-10-13
+Review Date: 2027-01-13
+Owner: Customer Support Team

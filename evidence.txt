@@ -1,0 +1,5 @@
+Payment Receipt
+Order ID: ORD12345
+Product: Laptop
+Amount: INR 1500
+Payment Status: Successful
