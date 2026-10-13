@@ -1,4 +1,3 @@
-
 from pathlib import Path
 from datetime import datetime, date, timedelta
 from types import SimpleNamespace
@@ -349,7 +348,6 @@ with Original:
 
     # Get Answer
     if st.button("Get Answer", key="original_get_answer"):
-
         if not original_question.strip():
             st.warning("Please enter a question first.")
 
@@ -360,32 +358,23 @@ with Original:
             try:
                 from langchain_helper import get_qa_chain
 
-                with st.spinner("Finding an answer..."):
+                with st.spinner("finding an answer..."):
                     chain = get_qa_chain()
-
-                    # create_retrieval_chain expects "input"
                     response = chain.invoke(
-                        {"input": original_question.strip()}
+                        {"query": original_question.strip()}
                     )
 
                 st.subheader("Answer")
 
-                # create_retrieval_chain returns "answer"
                 if isinstance(response, dict):
-                    answer = response.get("answer")
-
-                    if answer:
-                        st.write(answer)
-                    else:
-                        st.warning("No answer returned by the chatbot.")
-
-                    # Optional: display source documents
-                    context = response.get("context", [])
-
+                    st.write(
+                        response.get(
+                            "result",
+                            "No answer returned."
+                        )
+                    )
+                else:
+                    st.write(response)
 
             except Exception as exc:
-                error_text = str(exc).upper()
-
-
-                        f"Original chatbot error: {exc}"
-                    )
+                st.error(f"Original chatbot error: {exc}")
