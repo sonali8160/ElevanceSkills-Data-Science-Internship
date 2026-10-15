@@ -71,10 +71,9 @@ Original,T1,T2,T3,T4,T5,T6 = st.tabs(["Original Chatbot", "Task 1: Sentiment", "
 with T1:
     st.header("Task 1 — Sentiment, tone and escalation")
     msg = st.text_area("Customer message", "I was charged twice for order ORD12345. Please help.", key="u_t1_msg")
-    history = st.text_area("Conversation history (optional, one message per line)", "", key="u_t1_history")
     if st.button("Analyse sentiment and risk", key="u_t1_go", type="primary"):
         try:
-            result = analyze_message(msg, history=[x for x in history.splitlines() if x.strip()])
+            result = analyze_message(msg)
             st.json(result.__dict__ if hasattr(result, "__dict__") else result)
             if getattr(result, "risk_categories", None): st.warning("Risk detected: " + ", ".join(result.risk_categories))
         except Exception as e: st.error(f"Could not analyse message: {e}")
