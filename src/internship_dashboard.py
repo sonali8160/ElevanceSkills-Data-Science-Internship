@@ -153,7 +153,7 @@ with T4:
             expiry=st.date_input("Expiry date",date.today()+timedelta(days=365),key="u_t4_exp") if expiry_enabled else None
             version=st.text_input("Version", "v1",key="u_t4_ver")
             doctype=st.selectbox("Document type",["faq","policy","troubleshooting","guide"],key="u_t4_type")
-        content=st.text_area("Document content", "Customers can request help by contacting support with their order ID.",key="u_t4_content")
+        content=st.text_area("Document content", "Customers can contact customer support through the help section. Provide your order Id and a brief description of your issue.",key="u_t4_content")
         if st.button("Add document to knowledge base",key="u_t4_add"):
             try:
                 doc=RAGDocument(doc_id=docid,content=content,product=product,region=region,access_level=access,effective_date=effective,expiry_date=expiry,version=version,doc_type=doctype,source=docid)
