@@ -107,8 +107,7 @@ with T2:
             ticket=res.ticket
             a,b,c=st.columns(3); a.metric("Priority",ticket.priority.upper()); b.metric("Status",ticket.status.replace("_"," ").title()); c.metric("SLA used",f"{ticket.sla_consumed_ratio*100:.1f}%")
             st.json({"ticket_id":ticket.ticket_id,"customer":ticket.customer.name,"email":ticket.customer.email,"order_id":ticket.order_id,"product":ticket.product,"issue_category":ticket.issue_category,"severity":ticket.severity,"assigned_agent":ticket.assigned_agent,"queue":ticket.assigned_queue,"sla_breached":getattr(ticket, "sla_breached", False),"escalation_triggered":getattr(ticket, "escalation_triggered", False),"escalation_reason":getattr(ticket, "escalation_reason", None),"missing_information":res.missing_information,"routing_reason":res.routing.reason if res.routing else None})
-            if res.information_request: st.info(res.information_request)
-
+           
 with T3:
     st.header("Task 3 — Knowledge-base update and monitoring")
     pipeline=st.session_state.unified_t3_pipeline
