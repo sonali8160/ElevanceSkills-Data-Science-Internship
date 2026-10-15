@@ -123,11 +123,6 @@ def build_information_request(
             "the affected product or course"
         ),
 
-        "evidence": (
-            "supporting evidence such as a "
-            "screenshot, receipt, invoice, "
-            "or error code"
-        ),
     }
 
     requested = []
